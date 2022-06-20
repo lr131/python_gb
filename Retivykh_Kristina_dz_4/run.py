@@ -1,0 +1,25 @@
+from utils import currency_rates, currency_rates_xml, \
+    currency_rates_str_only, currency_rates_adv, currency_rates_decimal
+
+if __name__ == '__main__':
+    print("Работа функции с данными в формате xml:")
+    print("usd: ", currency_rates_xml("usd"))
+    print("uAd: ", currency_rates_xml("uAd"))
+    print("return type: ", type(currency_rates_xml("usd")))
+    print("\nРабота функции с данными в формате json:")
+    print("return type: ", currency_rates("usd"))
+    print("usd: ", currency_rates("usd"))
+    print("EUR: ", currency_rates("EUR"))
+    print("EAR: ", currency_rates("EAR"))
+    print("\nРабота функции методами строк:")
+    print("uКd: ", currency_rates_str_only("uКd"))
+    print("usd: ", currency_rates_str_only("usd"))
+    print("return type: ", currency_rates_str_only("usd"))
+    print("\nДоработанная функция с датой:")
+    print("EUR: ", currency_rates_adv("EUR"))
+    print("Usd: ", currency_rates_adv("Usd"))
+    print("ETR: ", currency_rates_adv("ETR"))
+    print("\nФункция, возвращающая decimal:")
+    print("EUR: ", currency_rates_decimal("EUR"))
+    print("Usd: ", currency_rates_decimal("Usd"))
+    print("ETR: ", currency_rates_decimal("ETR"))
