@@ -2,12 +2,11 @@
 # Написать генератор нечётных чисел от 1 до n (включительно),
 # используя ключевое слово yield:
 def task_one():
-    print("\nПример 1:")
     for i in num_generator(15, 1):
         print(i)
-    print("\nПример 2:")
-    for i in num_generator(123, 13):
-        print(i)
+    # print("\nПример 2:")
+    # for i in num_generator(123, 13):
+    #    print(i)
 
 
 def num_generator(max_num, start_num=3):
@@ -38,7 +37,6 @@ def task_three():
     print("\nПример 2:")
     for i in tuple_generator(tutors, klasses2):
         print(i)
-        print(type(i))
 
     # Доказать, что вы создали именно генератор.
     generator = tuple_generator(['Дмитрий', 'Борис', 'Елена'],
@@ -46,6 +44,7 @@ def task_three():
     print("\nДоказать, что вы создали именно генератор:")
     print(type(generator))
     # Проверить его работу вплоть до истощения.
+    print("Проверить его работу вплоть до истощения:")
     print(next(generator))
     print(next(generator))
     print(next(generator))
@@ -83,9 +82,9 @@ def task_five():
 if __name__ == '__main__':
     print("\nЗадача № 1:")
     task_one()
-    print("****\nЗадача № 3:")
+    print("\n****\nЗадача № 3:")
     task_three()
-    print("****\nЗадача № 5:")
+    print("\n****\nЗадача № 5:")
     print(task_five())
-    print("****\nЗадача № 4:")
+    print("\n****\nЗадача № 4:")
     print(task_four())
