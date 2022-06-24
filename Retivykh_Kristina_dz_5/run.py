@@ -40,6 +40,17 @@ def task_three():
         print(i)
         print(type(i))
 
+    # Доказать, что вы создали именно генератор.
+    generator = tuple_generator(['Дмитрий', 'Борис', 'Елена'],
+                                ['9Б', '9В'])
+    print("\nДоказать, что вы создали именно генератор:")
+    print(type(generator))
+    # Проверить его работу вплоть до истощения.
+    print(next(generator))
+    print(next(generator))
+    print(next(generator))
+    print(next(generator))
+
 
 def tuple_generator(tutors, klasses):
     """Генератор для задачи №3, возвращающий кортежи вида (<tutor>, <klass>)"""
@@ -70,7 +81,11 @@ def task_five():
 
 
 if __name__ == '__main__':
+    print("\nЗадача № 1:")
     task_one()
+    print("****\nЗадача № 3:")
     task_three()
-    print(task_four())
+    print("****\nЗадача № 5:")
     print(task_five())
+    print("****\nЗадача № 4:")
+    print(task_four())
