@@ -36,6 +36,7 @@ def save_file(data, filename):
 
 
 def save_file_adv(data, filename, separator=";"):
+    """Записывает данные в файл построчно"""
     with open(filename, 'a', encoding='utf-8') as file:
         writer = csv.writer(file, delimiter=separator)
         writer.writerow(data)
