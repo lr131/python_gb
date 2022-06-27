@@ -6,7 +6,7 @@ REGEXP_FILENAME = r"[^\\/^*?<>|\r\n]+$"
 
 
 def get_filename():
-    return input(f"Введите название файла без пути к нему:\n")
+    return input("Введите название файла без пути к нему:\n")
 
 
 def confirm_filename(filename):
@@ -47,4 +47,3 @@ if __name__ == '__main__':
     for datum in data:
         utils_users.save_file_adv(datum.values(), result_path, ";")
     print(f"Файл {result_path} успешно сохранен")
-

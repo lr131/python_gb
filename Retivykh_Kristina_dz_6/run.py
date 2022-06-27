@@ -31,7 +31,6 @@ def task_four():
     if data == 1:
         print("1")
         return 1
-    # переписать с использованием использованием csv и заделом шапки
     utils_users.save_file_adv(["family",
                                "name",
                                "patr",
@@ -43,17 +42,8 @@ def task_four():
         print(info)
 
 
-
-def task_five():
-    pass
-
-
-def task_six():
-    pass
-
-
 if __name__ == '__main__':
-    # task_one()
-    # task_two()
+    task_one()
+    task_two()
     task_three()
     task_four()

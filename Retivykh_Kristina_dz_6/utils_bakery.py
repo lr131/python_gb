@@ -14,4 +14,3 @@ def show_sale(startline=1, stopline=None):
         lines = islice(file, startline - 1, stopline, None)
         for line in lines:
             print(line)
-
