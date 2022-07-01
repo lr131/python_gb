@@ -1,13 +1,13 @@
 import os
 from pprint import pprint
 
-PATH = "/home/lr131/projects/python_gb/Retivykh_Kristina_dz_4/"
+# PATH = "/home/lr131/projects/python_gb/Retivykh_Kristina_dz_4/"
+PATH = os.curdir
 start_size = 10
 
 
-
 def get_size(filename):
-    """Return the size of a file, reported by os.stat()."""
+    """Возвращает размер файла"""
     return os.stat(filename).st_size
 
 

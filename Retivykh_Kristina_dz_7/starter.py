@@ -46,7 +46,7 @@ FILE_CONFIG_TWO = "config.yaml"
 def create_element(path):
     print(path, os.path.basename, "." in os.path.basename(path))
     if "." in os.path.basename(path):
-        print(("IsFile"))
+        print("IsFile")
         try:
             open(path, 'w').close()
         except OSError as e:
