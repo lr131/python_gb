@@ -1,5 +1,7 @@
 import re
 
+from functools import wraps
+
 
 def email_parse(email_address):
     regexp = re.compile(r'\b([\w]+)@(\w+\.[a-zA-Z]+)\b')
@@ -17,6 +19,8 @@ def task_one():
 
 
 def type_logger(func):
+
+    @wraps(func)
     def wrapper(*args):
         res = func(*args)
         args_str = ", ".join(tuple(map(lambda x: f'{x}: {type(x)}', args)))
@@ -39,13 +43,14 @@ def calc_cubes(*args):
 
 def task_three():
     a = calc_cube(5)
-    print('result task_three: ', a)
+    print('result task_three: ', a, "function name = ", calc_cube.__name__)
     a = calc_cubes(5, 3, 2, 1)
-    print('result task_three: ', a)
+    print('result task_three: ', a, "function name = ", calc_cube.__name__)
 
 
 def val_checker(validate):
     def _val_checker(func):
+        @wraps(func)
         def wrapper(*args):
             valid = tuple(map(validate, args))
             if False in valid:
@@ -59,6 +64,7 @@ def val_checker(validate):
 @val_checker(lambda x: x > 0)
 def calc_cube_4(x):
     return x ** 3
+
 
 @val_checker(lambda x: x > 0)
 def calc_cubes_4(*args):
@@ -74,5 +80,5 @@ def task_four():
 
 if __name__ == '__main__':
     # task_one()
-    # task_three()
+    task_three()
     task_four()
