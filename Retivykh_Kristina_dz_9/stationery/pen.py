@@ -6,4 +6,4 @@ class Pen(Stationery):
         super().__init__(title)
 
     def draw(self):
-        print(f"Запуск отрисовки {self.title}")
+        print(f"Запуск отрисовки класса {type(self)} объекта {self.title}")
