@@ -10,7 +10,6 @@ from stationery.pencil import Pencil
 from stationery.handle import Handle
 
 
-
 if __name__ == '__main__':
     trafficLight = TrafficLight()
     trafficLight.running(2)
@@ -31,9 +30,9 @@ if __name__ == '__main__':
     policeCar = PoliceCar(60, "Lada", "Тойота", True)
     policeCar.show_speed()
 
-    pen = Pen()
+    pen = Pen("ручка")
     pen.draw()
-    pencil = Pencil()
+    pencil = Pencil("Карандаш")
     pencil.draw()
-    handle = Handle()
+    handle = Handle("Маркер")
     handle.draw()
