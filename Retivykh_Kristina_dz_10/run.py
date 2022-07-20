@@ -56,8 +56,42 @@ def task2():
     print(coat.consumption)
     print(costume.consumption)
 
+
 def task3():
-    pass
+    cell1 = Cell(12)
+    cell2 = Cell(15)
+    print(cell1)
+    print(type(cell1))
+    print(cell1.make_order(5))
+
+    print(cell2)
+    print(type(cell2))
+    print(cell2.make_order(5))
+
+    print("cell1 + cell2")
+    cell_sum = cell1 + cell2
+    print(cell_sum)
+    print(type(cell_sum))
+
+    print("cell2 - cell1")
+    cell_sub = cell2 - cell1
+    print(cell_sub)
+    print(type(cell_sub))
+
+    print("cell1 * cell2")
+    cell_m = cell1 * cell2
+    print(cell_m)
+    print(type(cell_m))
+
+    print("cell1 / cell2")
+    cell_d = cell1 / cell2
+    print(cell_d)
+    print(type(cell_d))
+
+    print("cell1 // cell2")
+    cell_fd = cell1 // cell2
+    print(cell_fd)
+    print(type(cell_fd))
 
 
 if __name__ == '__main__':

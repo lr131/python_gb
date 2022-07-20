@@ -3,7 +3,7 @@ class Cell:
         if nucleus > 0:
             self.nucleus = nucleus
         else:
-            raise Exception('в клетке должны быть ячейки!')
+            raise ValueError('в клетке должны быть ячейки!')
 
     def __str__(self):
         return f'Количество ячеек клетки {self.nucleus}'
@@ -20,7 +20,18 @@ class Cell:
         return Cell(int(self.nucleus * other.nucleus))
 
     def __truediv__(self, other):
-        return Cell(round(self.nucleus // other.nucleus))
+        if round(self.nucleus / other.nucleus) > 0:
+            return Cell(round(self.nucleus / other.nucleus))
+        else:
+            raise ZeroDivisionError("в результирующей клетке "
+                                    "должны быть ячейки!")
+
+    def __floordiv__(self, other):
+        if self.nucleus // other.nucleus > 0:
+            return Cell(self.nucleus // other.nucleus)
+        else:
+            raise ZeroDivisionError("в результирующей клетке "
+                                    "должны быть ячейки!")
 
     def make_order(self, count):
         rows = (self.nucleus // count) * (("*"*count) + "\n")
