@@ -15,10 +15,10 @@ class ComplexNumber:
             raise TypeError
         
     def __add__(self, obj):
-        return f'z = {self.real + obj.real} + {self.imaginary + obj.imaginary}*i'
+        return ComplexNumber(self.real + obj.real, self.imaginary + obj.imaginary)
 
     def __mul__(self, obj):
-        return f'z = {self.real * obj.real - (self.imaginary * obj.imaginary)} + {self.imaginary * obj.real}*i'
+        return ComplexNumber(self.real * obj.real - (self.imaginary * obj.imaginary), self.imaginary * obj.real)
 
     def __str__(self):
         return f'z = {self.real} + {self.imaginary}*i'
