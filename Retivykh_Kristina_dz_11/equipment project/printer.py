@@ -20,6 +20,7 @@ class Printer(Equipment):
         self.method = method 
         self.os_compatibility = os_compatibility 
         self.is_duplex = is_duplex 
+    
     def __eq__(self, other):
         if not isinstance(other, Printer):
             return False
@@ -35,3 +36,17 @@ class Printer(Equipment):
             and (self.is_duplex == other.is_duplex)):
                 return True
         return False
+    
+    def to_dict(self):
+        return {
+            'class': type(self),
+            'serial': self.serial,
+            'year': self.year,
+            'company': self.company,
+            'model': self.model,
+            'subtype': self.subtype,
+            'printing_type': self.printing_type,
+            'method': self.method,
+            'os_compatibility': self.os_compatibility,
+            'is_duplex': self.is_duplex
+        }

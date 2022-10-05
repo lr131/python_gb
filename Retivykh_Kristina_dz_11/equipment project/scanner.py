@@ -33,3 +33,16 @@ class Scanner(Equipment):
             and (self.speed == other.speed)):
                 return True
         return False
+    
+    def to_dict(self):
+        return {
+            'class': type(self),
+            'serial': self.serial,
+            'year': self.year,
+            'company': self.company,
+            'model': self.model,
+            'subtype': self.subtype,
+            'speed': self.speed,
+            'output_file_formats': self.output_file_formats,
+            'os_compatibility': self.os_compatibility
+        }

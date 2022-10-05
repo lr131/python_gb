@@ -33,3 +33,16 @@ class Copier(Equipment):
             and (self.speed == other.speed)):
                 return True
         return False
+    
+    def to_dict(self):
+        return {
+            'class': type(self),
+            'serial': self.serial,
+            'year': self.year,
+            'company': self.company,
+            'model': self.model,
+            'subtype': self.subtype,
+            'copy_cost': self.copy_cost,
+            'method': self.method,
+            'speed': self.speed
+        }

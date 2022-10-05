@@ -1,10 +1,8 @@
 from datetime import datetime
 import uuid
 
-from copier import Copier
-from scanner import Scanner
-from printer import Printer
-from branch import Branch
+from equipment import Equipment
+
 from exceptions import OutOfStoreError
 from exceptions import NotFoundEquipmentError
 from exceptions import LogisticPathEquipmentError
@@ -53,38 +51,35 @@ class Store:
                     'reg_date': obj.reg_date})
             return env
 
-    @classmethod
-    def from_list(cls, t, h, lst):
-        """Метод задает состояние склада из списка оборудования.
-        По сути массовое добавление"""
-        return cls(t, h, lst)
-
-    def add(self, equipment, count=1):
-        if (len(self.__state) + count) > self.capacity:
+    def add(self, equipment):
+        if not isinstance(equipment, Equipment):
+            raise ValueError("Оборудование должно быть класса Equipment")
+        if (len(self.__state) + 1) > self.capacity:
             raise OutOfStoreError
-        for k in range(0,count):
             
-            inventory_number = uuid.uuid4()
-            state = self.State(obj=equipment, 
-                               inventory_number=inventory_number,
-                               reg_date=datetime.now().date())
-            self.__state.append(state)
-            # проверяем, заказывали ли эту единицу оборудования
+        inventory_number = uuid.uuid4()
+        state = self.State(obj=equipment, 
+                            inventory_number=inventory_number,
+                            reg_date=datetime.now().date())
+        self.__state.append(state)
+        # проверяем, заказывали ли эту единицу оборудования
 
-            i = self.find_logistic(equipment)
-            if i:
-                self.__logistic[i]['inventory_number'] = inventory_number
-                self.__logistic[i]['date'] = datetime.now().date()
-                self.__logistic[i]['action'] = 'получен'
-            else:
-                self.__logistic.append({'equipment': equipment,
-                                        'inventory_number': inventory_number,
-                                        'serial': equipment.serial,
-                                        'date': datetime.now().date(),
-                                        'action': 'получен',
-                                        'branch': None})
+        i = self.find_logistic(equipment)
+        if i:
+            self.__logistic[i]['inventory_number'] = inventory_number
+            self.__logistic[i]['date'] = datetime.now().date()
+            self.__logistic[i]['action'] = 'получен'
+        else:
+            self.__logistic.append({'equipment': equipment,
+                                    'inventory_number': inventory_number,
+                                    'serial': equipment.serial,
+                                    'date': datetime.now().date(),
+                                    'action': 'получен',
+                                    'branch': None})
 
     def order(self, equipment):
+        if not isinstance(equipment, Equipment):
+            raise ValueError("Оборудование должно быть класса Equipment")
         self.__logistic.append({'equipment': equipment,
                                 'serial': equipment.serial,
                                 'inventory_number': None,
@@ -93,13 +88,26 @@ class Store:
                                 'branch': None})
         
 
-    def push(self, equipment, inventory_number, branch):       
-        #Удалять из State, в логистике менять 
-        state_indx = self.find(inventory_number)
-        if state_indx:
+    def push(self, equipment, branch, inventory_number=None):
+        if not isinstance(equipment, Equipment):
+            raise ValueError("Оборудование должно быть класса Equipment")
+        """Метод отгружает оборудование в отделение""" 
+        if inventory_number:     
+            #Удалять из State, в логистике менять 
+            state_indx = self.find(inventory_number)
+        else:
+            state_indx = self.find(serial=equipment.serial)
+        
+        if isinstance(state_indx, int) and state_indx >=0:
             self.__state.pop(state_indx)
-            indx = self.find_logistic(inventory_number)
-            if indx:
+            if inventory_number:
+                indx = self.find_logistic(equipment=equipment, 
+                                          inventory_number=inventory_number)
+            else:
+                indx = self.find_logistic(equipment=equipment,
+                                          serial=equipment.serial)
+
+            if isinstance(indx, int) and indx >=0:
                 branch.add(equipment)
                 self.__logistic[indx]['action'] = 'отправлен'
                 self.__logistic[indx]['branch'] = branch.name
@@ -107,17 +115,29 @@ class Store:
                 raise LogisticPathEquipmentError
         else:
             raise NotFoundEquipmentError
+        
     
-    def find(self, inventory_number):
-        for i, obj in enumerate(self.__state):
-            if (obj.inventory_number == inventory_number):
-                return i
+    def find(self, inventory_number=None, serial=None):
+        if serial:
+            for i, obj in enumerate(self.__state):
+                if (obj.obj.serial == serial):
+                    return i
+        elif inventory_number:    
+            for i, obj in enumerate(self.__state):
+                if (obj.inventory_number == inventory_number):
+                    return i
         return None
 
-    def find_logistic(self, equipment, inventory_number=None):
+    def find_logistic(self, equipment, inventory_number=None, serial=None):
         if inventory_number:
             for i, obj in enumerate(self.__logistic):
                 if (obj.get('inventory_number') == inventory_number):
+                    return i
+            return None
+        
+        if serial:
+            for i, obj in enumerate(self.__logistic):
+                if (obj.get('serial') == serial):
                     return i
             return None
                 
@@ -126,13 +146,16 @@ class Store:
                 return i
         return None
     
-    def get_filling(self):
+    @property
+    def state(self):
         return [self.State.to_dict(obj) for obj in self.__state]
-
-    @staticmethod
-    def list_to_state(lst):
-        # тут будет перевод обычного списка в нормальный словарь
-        return []
+    
+    @property
+    def logistic(self):
+        res = []
+        for obj in self.__logistic:
+            res.append(dict(map(lambda x: (x[0], x[1]) if x[0] != 'equipment' else (x[0], x[1].to_dict()), tuple(obj.items()))))
+        return tuple(res)
     
     def __str__(self):
         return (f"Характеристики склада:\n"

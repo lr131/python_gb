@@ -10,3 +10,8 @@ class Branch:
     
     def add(self, equipment):
         self.store.append(equipment)
+        
+    def __str__(self):
+        return (f"Подразделение {self.name}\n"
+                f"Расположение {self.location}\n"
+                f"Оборудование: {tuple(map(lambda x: x.to_dict(), self.store))} ")

@@ -1,12 +1,23 @@
 import uuid
+from datetime import datetime
 from pprint import pprint
 
 from branch import Branch
+from equipment import Equipment
 from copier import Copier
 from scanner import Scanner
 from printer import Printer
 from store import Store
-from exceptions import *
+from exceptions import OutOfStoreError
+from exceptions import NotFoundEquipmentError
+from exceptions import LogisticPathEquipmentError
+
+
+def get_printer_list(count=2):
+    return [ Printer(serial=uuid.uuid4(), year=2020, model='tr', subtype='printer',
+                         printing_type='цветной', method='лазерный', company='Kyocera',
+                         os_compatibility='Windows,Ubuntu', is_duplex=True) for x in range(0,count)]
+
 
 if __name__ == '__main__':
     
@@ -46,10 +57,50 @@ if __name__ == '__main__':
     store.add(cp_brozers)
     store.add(sc_bears)
     
+    store.order(cp_xerox)
+    
+    print("Логистика до отправки")
+    pprint(store.logistic)
+    
     print(store)
     
     # print(cp_brozers.to_dict())
     
-    pprint(store.get_filling())
+    ## вывод содержимого склада
+    print("Содержимое склада до отправки")
+    pprint(store.state)
     
-    print("Работа идёт штатно")
+ 
+    store.push(equipment=cp_brozers, branch=irk)
+    
+    print("Подразделение после отправки")
+    print(irk)
+    print("Логистика после отправки")
+    pprint(store.logistic)
+    print("Содержимое склада после отправки")
+    pprint(store.state)
+    
+    for obj in get_printer_list(46):
+        store.add(obj)
+        
+    print(store)
+    
+    store.add(cp_xerox)
+    
+    print(store)
+    
+    print(Equipment.dzen_sysadmin())
+    
+    # проверяем валидацию добавляемого типа
+    store.add({'class': "scanner.Scanner",
+               'company': 'HP',
+               'inventory_number': '3797fbe6-e285-4f21-99cb-3e0112bbe188',
+               'model': 'br',
+               'os_compatibility': 'Windows',
+               'output_file_formats': 'png,bmp,jpg',
+               'reg_date': datetime.now().date(),
+               'serial': '6b7c664f-38a4-49d1-bddc-f93afa8e02d4',
+               'speed': 50,
+               'subtype': 'планшетный',
+               'year': 2003})
+    
