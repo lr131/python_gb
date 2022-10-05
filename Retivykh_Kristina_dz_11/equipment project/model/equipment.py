@@ -6,3 +6,6 @@ class Equipment:
         self.company = company
         self.model = model
         self.subtype = subtype
+
+    def __eq__(self, other):
+        return False

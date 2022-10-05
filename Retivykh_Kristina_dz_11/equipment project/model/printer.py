@@ -9,3 +9,19 @@ class Printer(Equipment):
         self.method = method
         self.os_compatibility = os_compatibility
         self.is_duplex = is_duplex
+
+    def __eq__(self, other):
+        if not isinstance(other, Printer):
+            return False
+    
+        if ((self.serial == other.serial)
+            and (self.year == other.year)
+            and (self.company == other.company)
+            and (self.model == other.model)
+            and (self.subtype == other.subtype)
+            and (self.printing_type == other.printing_type)
+            and (self.method == other.method)
+            and (self.os_compatibility == other.os_compatibility)
+            and (self.is_duplex == other.is_duplex)):
+                return True
+        return False
