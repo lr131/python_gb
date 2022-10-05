@@ -28,7 +28,7 @@ class ComplexNumber:
         return (self.real == other.real) and (self.imaginary == other.imaginary)
     
     def __str__(self):
-        return f'({self.real} + {self.imaginary}*i)'
+        return f'({self.real}{" + " if self.imaginary > 0 else " - "}{abs(self.imaginary)}*i)'
     
     
 if __name__ == '__main__':
