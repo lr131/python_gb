@@ -2,10 +2,19 @@ from equipment import Equipment
 
 
 class Scanner(Equipment):
+    """Класс Сканнер
+    @:param serial серийный номер
+    @:param year Год выпуска
+    @:param company Компания
+    @:param model Модель
+    @:param subtype Разновидность сканнера: ручной, протяжный, планшетный, слайд-сканнер, проекционный, барабанный
+    @:param output_file_formats в каких форматах сохраняет
+    @:param os_compatibility Совместимость с ОС
+    @:param speed Скорость сканирования
+    """
     def __init__(self, serial, year, company, model, subtype,
-                 light_source, output_file_formats, os_compatibility, speed):
+                 output_file_formats, os_compatibility, speed):
         super().__init__(serial, year, company, model, subtype)
-        self.light_source = light_source
         self.speed = speed
         self.output_file_formats = output_file_formats
         self.os_compatibility = os_compatibility
@@ -19,7 +28,6 @@ class Scanner(Equipment):
             and (self.company == other.company)
             and (self.model == other.model)
             and (self.subtype == other.subtype)
-            and (self.light_source == other.light_source)
             and (self.output_file_formats == other.output_file_formats)
             and (self.os_compatibility == other.os_compatibility)
             and (self.speed == other.speed)):

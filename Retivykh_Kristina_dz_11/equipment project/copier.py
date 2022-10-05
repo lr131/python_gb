@@ -1,7 +1,17 @@
-from . import Equipment
+from equipment import Equipment
 
 
 class Copier(Equipment):
+    """Класс Сканнер
+    @:param serial серийный номер
+    @:param year Год выпуска
+    @:param company Компания
+    @:param model Модель
+    @:param subtype Тип по принципу сканирования: аналоговый, цифровой
+    @:param copy_cost Поддерживаемый формат бумаги: А4, А3, А2
+    @:param method Метод печати: струйный, термопечать, сублимации, ударно-красочный
+    @:param speed Скорость копирования (копий/мин)
+    """
     def __init__(self, serial, year, company, model, subtype,
                  copy_cost, method, speed):
         super().__init__(serial, year, company, model, subtype)

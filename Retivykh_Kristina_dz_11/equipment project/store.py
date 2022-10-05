@@ -1,5 +1,4 @@
 from datetime import datetime
-from re import L
 import uuid
 
 from copier import Copier
@@ -16,8 +15,6 @@ class Store:
     @:param temp средняя температура склада
     @:param humidity средняя влажность склада
     @:param capacity вместимость склада, сколько единиц в него входит
-    @:param temp средняя температура склада
-    @:param state средняя температура склада
     """
     __logistic = [] # учет движения техники, логистика
     __state = [] # текущее наполнение склада, его состояние
@@ -27,7 +24,6 @@ class Store:
         self.temp = temp # средняя температура
         self.humidity = humidity # влажность
         self.capacity = capacity # вместимость
-        # state: "(ожидается, получен, отправлен)"
 
     class State:
         """Состояние содержимого склада на текущий момент"""
@@ -40,25 +36,53 @@ class Store:
             self.obj = obj
             self.inventory_number = inventory_number
             self.reg_date = reg_date
+        
+        def to_dict(self):
+            env = self.obj.to_dict()
+            env.update({'inventory_number': self.inventory_number,
+                    'reg_date': self.reg_date})
+            return env
+            
+        def __str__(self):
+            return str(self.to_dict())
+            
+        @classmethod    
+        def state_to_dict(cls, obj):
+            env = obj.obj.to_dict()
+            env.update({'inventory_number': obj.inventory_number,
+                    'reg_date': obj.reg_date})
+            return env
 
     @classmethod
     def from_list(cls, t, h, lst):
+        """Метод задает состояние склада из списка оборудования.
+        По сути массовое добавление"""
         return cls(t, h, lst)
 
     def add(self, equipment, count=1):
-        # проверить, заказывали ли
         if (len(self.__state) + count) > self.capacity:
             raise OutOfStoreError
         for k in range(0,count):
+            
             inventory_number = uuid.uuid4()
-            self.__logistic.append({'equipment': equipment,
-                                    'inventory_number': inventory_number,
-                                    'serial': equipment.serial,
-                                    'date': datetime.now().date(),
-                                    'action': 'получен',
-                                    'branch': None})
-            self.__state.append(self.State(equipment, inventory_number,
-                                    reg_date=datetime.now().date()))
+            state = self.State(obj=equipment, 
+                               inventory_number=inventory_number,
+                               reg_date=datetime.now().date())
+            self.__state.append(state)
+            # проверяем, заказывали ли эту единицу оборудования
+
+            i = self.find_logistic(equipment)
+            if i:
+                self.__logistic[i]['inventory_number'] = inventory_number
+                self.__logistic[i]['date'] = datetime.now().date()
+                self.__logistic[i]['action'] = 'получен'
+            else:
+                self.__logistic.append({'equipment': equipment,
+                                        'inventory_number': inventory_number,
+                                        'serial': equipment.serial,
+                                        'date': datetime.now().date(),
+                                        'action': 'получен',
+                                        'branch': None})
 
     def order(self, equipment):
         self.__logistic.append({'equipment': equipment,
@@ -78,6 +102,7 @@ class Store:
             if indx:
                 branch.add(equipment)
                 self.__logistic[indx]['action'] = 'отправлен'
+                self.__logistic[indx]['branch'] = branch.name
             else:
                 raise LogisticPathEquipmentError
         else:
@@ -92,16 +117,26 @@ class Store:
     def find_logistic(self, equipment, inventory_number=None):
         if inventory_number:
             for i, obj in enumerate(self.__logistic):
-                if (obj.inventory_number == inventory_number):
+                if (obj.get('inventory_number') == inventory_number):
                     return i
             return None
-        
+                
         for i, obj in enumerate(self.__logistic):
-            if (obj.equipment == equipment):
+            if (obj.get('equipment') == equipment):
                 return i
         return None
+    
+    def get_filling(self):
+        return [self.State.to_dict(obj) for obj in self.__state]
 
     @staticmethod
     def list_to_state(lst):
         # тут будет перевод обычного списка в нормальный словарь
         return []
+    
+    def __str__(self):
+        return (f"Характеристики склада:\n"
+            f"Средняя температура: {self.temp}\n"
+            f"Средняя влажность: {self.humidity}\n"
+            f"Вместимость: {self.capacity}\n"
+            f"Занято мест: {len(self.__state)}\n")

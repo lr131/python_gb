@@ -2,14 +2,24 @@ from equipment import Equipment
 
 
 class Printer(Equipment):
+    """Класс Сканнер
+    @:param serial серийный номер
+    @:param year Год выпуска
+    @:param company Компания
+    @:param model Модель
+    @:param subtype Подвид принтера: либо принтер, либо плоттер, либо фотопринтер
+    @:param printing_type Цветной либо монохромный
+    @:param method Метод печати: струйный, матричный, лазерный
+    @:param os_compatibility Совместимость с ОС
+    @:param is_duplex Есть ли двусторонняя печать
+    """
     def __init__(self, serial, year, company, model, subtype,
                  printing_type, method, os_compatibility, is_duplex=False):
         super().__init__(serial, year, company, model, subtype)
-        self.printing_type = printing_type
-        self.method = method
-        self.os_compatibility = os_compatibility
-        self.is_duplex = is_duplex
-
+        self.printing_type = printing_type 
+        self.method = method 
+        self.os_compatibility = os_compatibility 
+        self.is_duplex = is_duplex 
     def __eq__(self, other):
         if not isinstance(other, Printer):
             return False
